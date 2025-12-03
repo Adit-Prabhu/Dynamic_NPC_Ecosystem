@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.venv/
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Environment
+.env
+.env.local
+*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Chroma DB (local vector store)
+.chroma/
+
+# Node/Frontend
+node_modules/
+frontend/node_modules/
+frontend/dist/
+*.log
+npm-debug.log*
+
+# Build artifacts
+*.pyc

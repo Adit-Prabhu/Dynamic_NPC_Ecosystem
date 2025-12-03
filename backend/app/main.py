@@ -1,0 +1,174 @@
+from __future__ import annotations
+
+import asyncio
+import logging
+import os
+import random
+from typing import Any, Dict
+
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
+
+from npc.llm import GeminiDialogueModel, OpenRouterDialogueModel, TemplateDialogueModel
+from npc.orchestrator import Orchestrator
+from npc.personalities import list_personality_keys, sample_personality_keys
+
+from .schemas import DialogueTurnModel, ResetRequest, RunRequest, RunResponse
+
+logger = logging.getLogger(__name__)
+
+load_dotenv()
+
+DEFAULT_RUMOR_SEEDS = [
+    "Vault door left ajar last night.",
+    "Supply caravan spotted smoke near the marsh.",
+    "Guard captain seen bribing the tax clerk.",
+    "Somebody swapped the shop ledgers with counterfeits.",
+    "A wyvern shadow skimmed over the market at dawn.",
+]
+
+app = FastAPI(title="Dynamic NPC Ecosystem", version="0.1.0")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+
+def pick_personality_keys() -> list[str]:
+    roster = list_personality_keys()
+    env_pool = os.getenv("NPC_PERSONA_POOL", "").strip()
+    if env_pool:
+        requested = [key.strip() for key in env_pool.split("|") if key.strip()]
+        pool = [key for key in requested if key in roster]
+        if not pool:
+            logger.warning("NPC_PERSONA_POOL had no valid personas; using full roster")
+            pool = roster
+    else:
+        pool = roster
+    if len(pool) < 2:
+        logger.warning("Need at least two personas; reverting to default roster")
+        pool = roster
+    desired = os.getenv("NPC_PARTY_SIZE", "2").strip()
+    try:
+        desired_size = int(desired)
+    except ValueError:
+        logger.warning("NPC_PARTY_SIZE='%s' invalid; defaulting to 2", desired)
+        desired_size = 2
+    desired_size = max(2, desired_size)
+    desired_size = min(desired_size, len(pool))
+    return sample_personality_keys(desired_size, allowed_keys=pool)
+def pick_seed(event: str | None = None) -> str:
+    if event:
+        return event
+    env_seeds = os.getenv("NPC_RUMOR_SEEDS", "").strip()
+    if env_seeds:
+        candidates = [seed.strip() for seed in env_seeds.split("|") if seed.strip()]
+    else:
+        candidates = DEFAULT_RUMOR_SEEDS
+    return random.choice(candidates)
+
+
+def build_orchestrator(seed_event: str | None = None) -> Orchestrator:
+    provider = (os.getenv("NPC_MODEL_PROVIDER") or "template").lower()
+    
+    if provider == "openrouter":
+        api_key = os.getenv("OPENROUTER_API_KEY")
+        model_name = os.getenv("OPENROUTER_MODEL", "google/gemini-2.0-flash-exp:free")
+        temperature = float(os.getenv("OPENROUTER_TEMPERATURE", "0.7"))
+        if not api_key:
+            logger.warning("OPENROUTER_API_KEY missing; falling back to template dialogue model")
+            model = TemplateDialogueModel()
+        else:
+            model = OpenRouterDialogueModel(api_key=api_key, model_name=model_name, temperature=temperature)
+            logger.info("Using OpenRouter dialogue model %s", model_name)
+    elif provider == "gemini":
+        api_key = os.getenv("GEMINI_API_KEY")
+        model_name = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")
+        temperature = float(os.getenv("GEMINI_TEMPERATURE", "0.7"))
+        if not api_key:
+            logger.warning("GEMINI_API_KEY missing; falling back to template dialogue model")
+            model = TemplateDialogueModel()
+        else:
+            model = GeminiDialogueModel(api_key=api_key, model_name=model_name, temperature=temperature)
+            logger.info("Using Gemini dialogue model %s", model_name)
+    else:
+        model = TemplateDialogueModel()
+    hook = pick_seed(seed_event)
+    party = pick_personality_keys()
+    logger.info("Initializing orchestrator with rumor seed '%s' and roster %s", hook, party)
+    return Orchestrator(model=model, rumor_hook=hook, personalities=party)
+
+
+orchestrator = build_orchestrator()
+
+
+def get_dialogue_delay() -> float:
+    """Get the delay between dialogue exchanges in seconds."""
+    try:
+        return float(os.getenv("NPC_DIALOGUE_DELAY", "5"))
+    except ValueError:
+        return 5.0
+
+
+def reset_orchestrator(event: str | None = None) -> None:
+    global orchestrator
+    orchestrator = build_orchestrator(seed_event=event)
+
+
+@app.get("/api/state" )
+async def get_state() -> Dict[str, Any]:
+    return orchestrator.snapshot()
+
+
+@app.post("/api/run", response_model=RunResponse)
+async def run_steps(request: RunRequest) -> RunResponse:
+    history = orchestrator.run_steps(request.steps)
+    snapshot = orchestrator.snapshot()
+    return RunResponse(
+        history=[DialogueTurnModel(**turn) for turn in history],
+        world_state=snapshot["world_state"],
+    )
+
+
+@app.post("/api/reset")
+async def reset_state(request: ResetRequest) -> Dict[str, Any]:
+    reset_orchestrator(request.event)
+    return orchestrator.snapshot()
+
+
+@app.websocket("/ws/dialogue")
+async def dialogue_feed(websocket: WebSocket) -> None:
+    await websocket.accept()
+    delay = get_dialogue_delay()
+    logger.info(f"Starting dialogue feed with {delay}s delay between exchanges")
+    try:
+        while True:
+            turn = orchestrator.step()
+            payload = {
+                "turn": DialogueTurnModel(**turn.as_dict()).model_dump(),
+                "world_state": orchestrator.world_state.snapshot(),
+            }
+            await websocket.send_json(payload)
+            await asyncio.sleep(delay)
+    except WebSocketDisconnect:
+        logger.info("WebSocket disconnected")
+
+
+@app.get("/api/config")
+async def get_config() -> Dict[str, Any]:
+    """Get current configuration values."""
+    return {
+        "dialogue_delay": get_dialogue_delay(),
+        "model_provider": os.getenv("NPC_MODEL_PROVIDER", "template"),
+        "model_name": os.getenv("OPENROUTER_MODEL") or os.getenv("GEMINI_MODEL", "template"),
+    }
+
+
+@app.get("/health")
+async def healthcheck() -> Dict[str, str]:
+    return {"status": "ok"}
