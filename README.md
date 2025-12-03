@@ -119,10 +119,4 @@ cd backend
 python -m pytest
 ```
 
-## 📝 License
-
-MIT
-
----
-
 *Watch the townsfolk gossip without lifting a finger—each reset assembles a fresh duo with new secrets to share.*
