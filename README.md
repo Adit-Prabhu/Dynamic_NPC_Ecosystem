@@ -4,7 +4,7 @@ A demo sandbox where autonomous NPCs gossip, scheme, and spread rumors without p
 
 ![Python](https://img.shields.io/badge/python-3.12-blue) ![React](https://img.shields.io/badge/react-18-61dafb) ![FastAPI](https://img.shields.io/badge/fastapi-0.115-009688)
 
-## ✨ Features
+## Features
 
 - **Autonomous Conversations** – NPCs talk to each other based on personality, mood, and shared memories
 - **Persistent Memory** – Vector database (ChromaDB) stores what each NPC knows and heard
@@ -12,7 +12,7 @@ A demo sandbox where autonomous NPCs gossip, scheme, and spread rumors without p
 - **Distinctive Voices** – Each character has unique speech patterns, quirks, and motivations
 - **Real-time Dashboard** – Watch the gossip unfold with live telemetry
 
-## 🏗️ Architecture
+## Architecture
 
 | Path | Purpose |
 |------|---------|
@@ -20,7 +20,7 @@ A demo sandbox where autonomous NPCs gossip, scheme, and spread rumors without p
 | `frontend/` | Vite + React dashboard visualizing the gossip timeline and world telemetry |
 | `docs/` | Architecture documentation and design notes |
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Python 3.12+
@@ -53,7 +53,7 @@ npm run dev
 
 Open http://localhost:5173 to see the dashboard.
 
-## ⚙️ Configuration
+## Config
 
 Create a `.env` file in `backend/` with:
 
@@ -84,7 +84,7 @@ NPC_RUMOR_SEEDS="Vault door left ajar|Smuggler spotted in the sewers|Temple bell
 # NPC_PARTY_SIZE=2
 ```
 
-## 🎮 Usage
+## Usage
 
 1. **Start the backend** – `cd backend && python -m uvicorn app.main:app --reload`
 2. **Start the frontend** – `cd frontend && npm run dev`
@@ -101,7 +101,7 @@ NPC_RUMOR_SEEDS="Vault door left ajar|Smuggler spotted in the sewers|Temple bell
 | `/api/config` | GET | Current configuration |
 | `/ws/dialogue` | WS | Real-time dialogue stream |
 
-## 🎭 The Cast
+## The Cast
 
 | Character | Role | Voice |
 |-----------|------|-------|
@@ -112,7 +112,7 @@ NPC_RUMOR_SEEDS="Vault door left ajar|Smuggler spotted in the sewers|Temple bell
 | **Kel** | Exhausted Artificer | Rapid-fire, scattered, caffeine-fueled tangents |
 | **Suna** | Listening Herbalist | Soft, uses plant metaphors for people |
 
-## 🧪 Testing
+## Testing
 
 ```bash
 cd backend
