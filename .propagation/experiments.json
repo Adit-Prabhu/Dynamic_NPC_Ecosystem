@@ -1,0 +1,35 @@
+{
+  "experiments": [
+    {
+      "experiment_id": "exp_20251203_220827",
+      "secret": "The blacksmith is secretly a royal spy.",
+      "seed_agent": {
+        "id": "guard",
+        "name": "Rylan, the Anxious Guard"
+      },
+      "start_time": "2025-12-03T22:08:27.469460",
+      "total_turns": 0,
+      "agents_reached": [
+        "guard"
+      ],
+      "propagation_rate": 1.0,
+      "traces": []
+    },
+    {
+      "experiment_id": "exp_20251203_220909",
+      "secret": "The blacksmith is secretly a royal spy.",
+      "seed_agent": {
+        "id": "guard",
+        "name": "Rylan, the Anxious Guard"
+      },
+      "start_time": "2025-12-03T22:09:09.788717",
+      "total_turns": 0,
+      "agents_reached": [
+        "guard"
+      ],
+      "propagation_rate": 1.0,
+      "traces": []
+    }
+  ],
+  "saved_at": "2025-12-03T22:09:09.788878"
+}
