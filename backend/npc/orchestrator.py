@@ -98,11 +98,11 @@ class Orchestrator:
         self._active_secrets.append(secret)
         
         # Store the secret in the source NPC's memory
-        self.memory_store.add_dialogue_memory(
-            speaker=source_npc,
-            listener="self",
-            content=f"[SECRET] {secret}",
-            tags=["injected_secret", "confidential"]
+        self.memory_store.add_memory(
+            agent_id=source_npc,
+            text=f"[SECRET] {secret}",
+            tags=["injected_secret", "confidential"],
+            importance=1.0  # High importance for secrets
         )
         
         # Update world state to inject the secret as the current topic
