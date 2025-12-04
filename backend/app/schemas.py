@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -19,6 +19,8 @@ class DialogueTurnModel(BaseModel):
     content: str
     rumor_delta: float
     sentiment: str
+    internal_monologue: Optional[str] = None  # Chain-of-thought reasoning
+    graph_context: Optional[str] = None  # Relationship context from GraphRAG
 
 
 class RunResponse(BaseModel):

@@ -186,17 +186,19 @@ function ThoughtBubbleCard({ turn }: { turn: DialogueTurn }) {
       </p>
       
       {/* Internal Monologue - Chain of Thought */}
-      {expanded && turn.internal_monologue && (
+      {expanded && (
         <div className="thought-bubble">
           <span className="thought-icon">💭</span>
           <span className="thought-label">Internal:</span>
-          <span className="thought-text">"{turn.internal_monologue}"</span>
+          <span className="thought-text">
+            "{turn.internal_monologue || "..."}"
+          </span>
         </div>
       )}
       
       {/* Spoken Dialogue */}
       <div className="spoken-dialogue">
-        {expanded && <span className="spoken-label">Spoken:</span>}
+        {expanded && <span className="spoken-label">💬 Spoken:</span>}
         <p className={expanded ? "spoken-text" : ""}>{turn.content}</p>
       </div>
       
