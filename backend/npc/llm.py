@@ -220,14 +220,24 @@ The dialogue should feel like eavesdropping on a real conversation, not reading 
         if not api_key:
             raise ValueError("Gemini API key is required")
         genai.configure(api_key=api_key)
-        self._model = genai.GenerativeModel(
-            model_name=model_name,
-            generation_config={
-                "temperature": temperature,
-                "response_mime_type": "application/json",
-            },
-            system_instruction=self.SYSTEM_PROMPT,
-        )
+        
+        # Gemma models don't support system_instruction, so we'll prepend it to prompts
+        self._is_gemma = model_name.lower().startswith("gemma")
+        
+        generation_config = {"temperature": temperature}
+        # Gemma models also don't support response_mime_type for JSON
+        if not self._is_gemma:
+            generation_config["response_mime_type"] = "application/json"
+        
+        model_kwargs = {
+            "model_name": model_name,
+            "generation_config": generation_config,
+        }
+        # Only add system_instruction for non-Gemma models
+        if not self._is_gemma:
+            model_kwargs["system_instruction"] = self.SYSTEM_PROMPT
+            
+        self._model = genai.GenerativeModel(**model_kwargs)
 
     def generate(
         self,
@@ -302,10 +312,31 @@ Return JSON with:
 - "utterance": The actual spoken dialogue (1-3 sentences, no narration, NO "X, you say?" openings)
 - "rumor_delta": How much this spreads/intensifies the rumor (0.05 = idle chat, 0.35 = explosive revelation)
 - "sentiment": The emotional undertone ("curious", "worried", "conspiratorial", "dismissive", "excited", "bitter", "knowing", "anxious", "defiant")
-- "new_memory": A brief note about the NEW information or theory shared (not a repeat)"""
+- "new_memory": A brief note about the NEW information or theory shared (not a repeat)
+
+Return ONLY valid JSON, no markdown code blocks."""
+
+        # For Gemma models, prepend the system prompt to the user message
+        if self._is_gemma:
+            prompt = f"""<SYSTEM INSTRUCTIONS>
+{self.SYSTEM_PROMPT}
+</SYSTEM INSTRUCTIONS>
+
+{prompt}"""
 
         response = self._model.generate_content(prompt)
         content = getattr(response, "text", None) or response.candidates[0].content.parts[0].text  # type: ignore[index]
+        
+        # Clean up response - Gemma might wrap JSON in markdown code blocks
+        content = content.strip()
+        if content.startswith("```json"):
+            content = content[7:]
+        if content.startswith("```"):
+            content = content[3:]
+        if content.endswith("```"):
+            content = content[:-3]
+        content = content.strip()
+        
         try:
             payload = json.loads(content)
         except json.JSONDecodeError:
