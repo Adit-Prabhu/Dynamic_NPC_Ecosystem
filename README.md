@@ -8,7 +8,7 @@ A demo sandbox where autonomous NPCs gossip, scheme, and spread rumors without p
 
 - **Autonomous Conversations** – NPCs talk to each other based on personality, mood, and shared memories
 - **GraphRAG Memory** – Knowledge graph (NetworkX) tracks entities, relationships, and "who told whom"
-- **Chain-of-Thought Visibility** – See NPC internal monologue vs what they actually say (💭 Thought Bubble Inspector)
+- **Chain-of-Thought Visibility** - See NPC internal monologue vs what they actually say (Thought Bubble Inspector)
 - **Viral Propagation Tracking** – Inject secrets and measure how they spread through the network
 - **Personality-Based Analysis** – Compare gossip vs stoic personality propagation rates
 - **Evolving World State** – Rumors spread, guard alerts rise, shop prices fluctuate
@@ -118,13 +118,13 @@ NPC_RUMOR_SEEDS="Vault door left ajar|Smuggler spotted in the sewers|Temple bell
 
 ## Dashboard Tabs
 
-### 💬 Gossip Feed
+### Gossip Feed
 - Real-time dialogue timeline
 - Click any message to reveal **internal monologue** (what the NPC was thinking)
 - See graph context (relationship information used)
 - Rumor heat meter and world state telemetry
 
-### 📊 Propagation Lab
+### Propagation Lab
 - Inject custom secrets into NPCs
 - Run controlled experiments (5-50 rounds)
 - View stats by personality type:
@@ -172,4 +172,4 @@ python -m pytest
 - Measure semantic drift (how information mutates)
 - Compare personality types: gossips spread faster but mutate more
 
-*Watch the townsfolk gossip without lifting a finger—each reset assembles a fresh duo with new secrets to share.*
+*Watch the townsfolk gossip without lifting a finger, each reset assembles a fresh duo with new secrets to share.*
