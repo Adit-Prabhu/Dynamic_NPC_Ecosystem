@@ -1,5 +1,5 @@
 from npc.llm import DialogueResult, TemplateDialogueModel
-from npc.memory import MemoryStore
+from npc.graph_memory import GraphMemoryStore
 from npc.orchestrator import Orchestrator
 
 
@@ -16,7 +16,7 @@ class DummyModel(TemplateDialogueModel):
 
 
 def test_orchestrator_step_updates_world_state(tmp_path) -> None:
-    store = MemoryStore(tmp_path / "memory")
+    store = GraphMemoryStore(tmp_path / "memory")
     orchestrator = Orchestrator(
         memory_store=store,
         model=DummyModel(seed=42),
