@@ -81,11 +81,13 @@ Create a living NPC ecosystem where agents continue to evolve even without direc
 | Module | Responsibility |
 | --- | --- |
 | `backend/app/main.py` | API + WebSocket endpoints |
+| `backend/app/schemas.py` | Pydantic models for API responses |
 | `backend/npc/agents.py` | Agent definitions, memory integration |
 | `backend/npc/graph_memory.py` | GraphRAG implementation, entity extraction |
 | `backend/npc/orchestrator.py` | Conversation orchestration loop |
 | `backend/npc/personalities.py` | Persona configs, voice definitions |
 | `backend/npc/llm.py` | LLM integrations (Gemini, OpenRouter) |
+| `backend/npc/propagation.py` | Viral information tracking, experiment runner |
 | `backend/npc/state.py` | World state, conversation tracking |
 | `backend/tests/` | Unit & integration tests |
 | `frontend/` | Visualization client |
@@ -101,6 +103,16 @@ Create a living NPC ecosystem where agents continue to evolve even without direc
 | `/api/graph/entity/{type}/{name}` | GET | Entity context and relationships |
 | `/api/config` | GET | Current configuration |
 | `/ws/dialogue` | WS | Real-time dialogue feed |
+
+### Propagation Experiment Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/experiment/inject` | POST | Inject secret into an NPC to begin tracking |
+| `/api/experiment/stats` | GET | Propagation analysis by personality type |
+| `/api/experiment/timeline` | GET | All experiments with propagation traces |
+| `/api/experiment/report` | GET | Markdown analysis report |
+| `/api/experiment/step` | POST | Run dialogue steps with tracking enabled |
 
 ## Rumor Mechanics Walkthrough
 1. Orchestrator picks speaker + listener pair based on pending rumors.  
@@ -122,3 +134,51 @@ Create a living NPC ecosystem where agents continue to evolve even without direc
 - Unit tests for graph memory operations, entity extraction, path finding.
 - Orchestrator scheduling and rumor state transitions.  
 - Frontend component tests (Vitest) for log rendering + rumor meter.
+
+## Chain-of-Thought Visibility
+
+NPCs generate both **internal monologue** and **spoken dialogue**:
+
+```json
+{
+  "utterance": "What I say out loud...",
+  "internal_monologue": "What I'm really thinking...",
+  "rumor_delta": 0.15,
+  "new_memory": "Key takeaway..."
+}
+```
+
+The frontend displays both, allowing users to:
+- See the reasoning behind NPC responses
+- Understand why certain information was shared or withheld
+- Debug dialogue quality and personality consistency
+
+## Viral Propagation Tracking
+
+The `PropagationTracker` system enables quantitative analysis of information flow:
+
+### Experiment Workflow
+1. **Inject Secret** – Plant a secret in one NPC's memory
+2. **Run Dialogue** – Let NPCs talk autonomously  
+3. **Observe Propagation** – Track who mentions the secret
+4. **Analyze Results** – Compare by personality type
+
+### Metrics Tracked
+| Metric | Description |
+|--------|-------------|
+| **Propagation Count** | How many times the secret was mentioned |
+| **Fidelity** | Semantic similarity to original (0-100%) |
+| **Mutation Rate** | How often information changed |
+| **Spread Velocity** | Agents reached per turn |
+| **Personality Analysis** | Gossip vs Stoic vs Neutral comparison |
+
+### Personality Classification
+| Type | Indicators | Behavior |
+|------|------------|----------|
+| 🗣️ Gossip | curious, talkative, dramatic, theatrical | Spreads fast, mutates more |
+| 🤫 Stoic | reserved, guarded, careful, quiet | Spreads slow, higher fidelity |
+| 😐 Neutral | balanced traits | Middle ground |
+
+### Key Finding
+> Gossip personalities spread information ~3x faster than stoics, but with lower fidelity.
+> This matches real-world rumor dynamics!

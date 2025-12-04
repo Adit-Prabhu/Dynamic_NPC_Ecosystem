@@ -1,13 +1,16 @@
 # 🎭 Dynamic NPC Ecosystem
 
-A demo sandbox where autonomous NPCs gossip, scheme, and spread rumors without player intervention. Each character has a distinct personality, voice, and memory—powered by LLMs and vector search.
+A demo sandbox where autonomous NPCs gossip, scheme, and spread rumors without player intervention. Each character has a distinct personality, voice, and memory—powered by LLMs and GraphRAG.
 
 ![Python](https://img.shields.io/badge/python-3.12-blue) ![React](https://img.shields.io/badge/react-18-61dafb) ![FastAPI](https://img.shields.io/badge/fastapi-0.115-009688)
 
 ## Features
 
 - **Autonomous Conversations** – NPCs talk to each other based on personality, mood, and shared memories
-- **Persistent Memory** – Vector database (ChromaDB) stores what each NPC knows and heard
+- **GraphRAG Memory** – Knowledge graph (NetworkX) tracks entities, relationships, and "who told whom"
+- **Chain-of-Thought Visibility** – See NPC internal monologue vs what they actually say (💭 Thought Bubble Inspector)
+- **Viral Propagation Tracking** – Inject secrets and measure how they spread through the network
+- **Personality-Based Analysis** – Compare gossip vs stoic personality propagation rates
 - **Evolving World State** – Rumors spread, guard alerts rise, shop prices fluctuate
 - **Distinctive Voices** – Each character has unique speech patterns, quirks, and motivations
 - **Real-time Dashboard** – Watch the gossip unfold with live telemetry
@@ -16,8 +19,8 @@ A demo sandbox where autonomous NPCs gossip, scheme, and spread rumors without p
 
 | Path | Purpose |
 |------|---------|
-| `backend/` | FastAPI service with multi-agent orchestrator, memory layer, and WebSocket stream |
-| `frontend/` | Vite + React dashboard visualizing the gossip timeline and world telemetry |
+| `backend/` | FastAPI service with multi-agent orchestrator, GraphRAG memory, and WebSocket stream |
+| `frontend/` | Vite + React dashboard with Gossip Feed + Propagation Lab |
 | `docs/` | Architecture documentation and design notes |
 
 ## Quick Start
@@ -99,7 +102,38 @@ NPC_RUMOR_SEEDS="Vault door left ajar|Smuggler spotted in the sewers|Temple bell
 | `/api/run` | POST | Trigger N dialogue exchanges |
 | `/api/reset` | POST | Reset with new NPCs and rumor seed |
 | `/api/config` | GET | Current configuration |
+| `/api/graph` | GET | Knowledge graph statistics |
+| `/api/graph/entity/{type}/{name}` | GET | Entity context and relationships |
 | `/ws/dialogue` | WS | Real-time dialogue stream |
+
+### Propagation Experiment API
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/experiment/inject` | POST | Inject a secret into an NPC |
+| `/api/experiment/stats` | GET | Get propagation analysis by personality type |
+| `/api/experiment/timeline` | GET | Get all experiments with traces |
+| `/api/experiment/report` | GET | Generate markdown analysis report |
+| `/api/experiment/step` | POST | Run N dialogue steps with tracking |
+
+## Dashboard Tabs
+
+### 💬 Gossip Feed
+- Real-time dialogue timeline
+- Click any message to reveal **internal monologue** (what the NPC was thinking)
+- See graph context (relationship information used)
+- Rumor heat meter and world state telemetry
+
+### 📊 Propagation Lab
+- Inject custom secrets into NPCs
+- Run controlled experiments (5-50 rounds)
+- View stats by personality type:
+  - 🗣️ **Gossip** personalities (curious, talkative, dramatic)
+  - 🤫 **Stoic** personalities (reserved, guarded, careful)
+  - 😐 **Neutral** personalities
+- Track fidelity (how much of the secret survived)
+- Track mutation rate (how often information changed)
+- Compare gossip vs stoic propagation speeds
 
 ## The Cast
 
@@ -118,5 +152,24 @@ NPC_RUMOR_SEEDS="Vault door left ajar|Smuggler spotted in the sewers|Temple bell
 cd backend
 python -m pytest
 ```
+
+## Key Technical Features
+
+### GraphRAG Memory System
+- **Knowledge Graph** – NetworkX-based entity and relationship tracking
+- **Entity Types** – NPCs, locations, objects, events, concepts
+- **Relationship Tracking** – "who told whom", "who knows what"
+- **Context Retrieval** – Graph traversal for richer memory than vector search
+
+### Chain-of-Thought Transparency
+- LLM generates both **internal monologue** and **spoken dialogue**
+- Click any message to see what the NPC was *really* thinking
+- Helps debug and understand NPC reasoning
+
+### Viral Propagation Analysis
+- Inject "seed secrets" into specific NPCs
+- Track propagation through the network over time
+- Measure semantic drift (how information mutates)
+- Compare personality types: gossips spread faster but mutate more
 
 *Watch the townsfolk gossip without lifting a finger—each reset assembles a fresh duo with new secrets to share.*

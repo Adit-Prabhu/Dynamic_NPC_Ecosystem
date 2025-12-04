@@ -1,72 +1,112 @@
 {
   "experiments": [
     {
-      "experiment_id": "exp_20251203_221733",
-      "secret": "The blacksmith is secretly a royal spy",
+      "experiment_id": "exp_20251203_221837",
+      "secret": "The blacksmith is secretly a royal spy.",
       "seed_agent": {
-        "id": "bard",
-        "name": "Theron, the Itinerant Bard"
+        "id": "smuggler",
+        "name": "Iris, the Harbor Smuggler"
       },
-      "start_time": "2025-12-03T22:17:33.794192",
-      "total_turns": 4,
+      "start_time": "2025-12-03T22:18:37.613511",
+      "total_turns": 14,
       "agents_reached": [
-        "bard",
-        "guard"
+        "smuggler",
+        "bard"
       ],
-      "propagation_rate": 0.5,
+      "propagation_rate": 0.14285714285714285,
       "traces": [
         {
           "turn": 0,
-          "agent_id": "bard",
-          "agent_name": "Theron, the Itinerant Bard",
-          "personality_type": "gossip",
-          "content": "Ah, a tale unfolds! the [secret] the blacksmith is secretly a royal spy situation\u2014 right after the blacksmith is secretly a royal spy? please., and I've seen this pattern before.",
-          "similarity": 1.0,
-          "mutation": "added: right, situation, tale; lost: blacksmith secretly, secretly royal, royal spy",
-          "timestamp": "2025-12-03T22:17:33.817727"
+          "agent_id": "smuggler",
+          "agent_name": "Iris, the Harbor Smuggler",
+          "personality_type": "neutral",
+          "content": "Hah, a spy, you say? Well, I saw the Blacksmith pay for his last shipment with coins from the sunken city, the ones the Watch has been looking for. Seems he's got a few tricks up his sleeve, just like",
+          "similarity": 0.787,
+          "mutation": "added: his, pay, hah; lost: blacksmith secretly, royal, secretly",
+          "timestamp": "2025-12-03T22:18:44.628455"
         },
         {
           "turn": 1,
-          "agent_id": "guard",
-          "agent_name": "Rylan, the Anxious Guard",
-          "personality_type": "neutral",
-          "content": "Don't repeat this\u2014what happened with Blacksmith paid in ancient coins\u2014 can't be coincidence with ah, a tale unfolds! the [secret] the blacksmith is secretly a royal spy situation\u2014 right after the b, a",
-          "similarity": 1.0,
-          "mutation": "added: don, happened, ancient; lost: secretly, secretly royal, royal",
-          "timestamp": "2025-12-03T22:17:33.834603"
+          "agent_id": "bard",
+          "agent_name": "Theron, the Itinerant Bard",
+          "personality_type": "gossip",
+          "content": "Dear heart, if the Blacksmith *is* using sunken treasures, then perhaps the legends of the Vault door ajar last night, and the whispered tales of the Watch's shadowed dealings, are connected, wouldn't",
+          "similarity": 0.727,
+          "mutation": "added: heart, vault, using; lost: spy, blacksmith secretly, royal",
+          "timestamp": "2025-12-03T22:18:47.189156"
         },
         {
           "turn": 2,
-          "agent_id": "bard",
-          "agent_name": "Theron, the Itinerant Bard",
-          "personality_type": "gossip",
-          "content": "The whispers compose themselves: what happened with Blacksmith paid in ancient coins\u2014 same pattern as don't repeat this\u2014what happened with blacksmith paid in ancient coins\u2014 can't be coincidence with a",
-          "similarity": 0.495,
-          "mutation": "added: same, happened, ancient; lost: secretly, secretly royal, royal",
-          "timestamp": "2025-12-03T22:17:33.850961"
+          "agent_id": "smuggler",
+          "agent_name": "Iris, the Harbor Smuggler",
+          "personality_type": "neutral",
+          "content": "Sunken treasures, you say? I've seen the Blacksmith's coin pouch, my friend, and let me tell you, that metal gleamed like it'd been kissed by the kraken itself... and it smelled of salt and secrets, i",
+          "similarity": 0.727,
+          "mutation": "added: friend, say, let; lost: spy, blacksmith secretly, royal",
+          "timestamp": "2025-12-03T22:18:49.470039"
         },
         {
           "turn": 3,
-          "agent_id": "guard",
-          "agent_name": "Rylan, the Anxious Guard",
-          "personality_type": "neutral",
-          "content": "Don't repeat this\u2014what happened with Blacksmith paid in ancient coins\u2014 same pattern as the whispers compose themselves: what happened with blacksmith paid in ancient coins\u2014 same pattern a, and nobody'",
-          "similarity": 0.529,
-          "mutation": "added: same, don, happened; lost: secretly, secretly royal, royal",
-          "timestamp": "2025-12-03T22:17:33.867865"
-        },
-        {
-          "turn": 4,
           "agent_id": "bard",
           "agent_name": "Theron, the Itinerant Bard",
           "personality_type": "gossip",
-          "content": "Ah, a tale unfolds! that business with Blacksmith paid in ancient coins\u2014 it ties back to don't repeat this\u2014what happened with blacksmith paid in ancient coins\u2014 same pattern as the whispers , and you'r",
-          "similarity": 0.51,
-          "mutation": "added: back, don, tale; lost: secretly, secretly royal, royal",
-          "timestamp": "2025-12-03T22:17:33.884765"
+          "content": "Ah, the Vault! Last night, I *swear* I saw a sliver of moonlight glinting off its door, and I'd wager it was ajar, my friend. Perhaps the legends of the Vault are not just tales... perhaps they're a m",
+          "similarity": 0.36,
+          "mutation": "added: glinting, vault, night; lost: spy, blacksmith secretly, royal",
+          "timestamp": "2025-12-03T22:18:51.694658"
+        },
+        {
+          "turn": 7,
+          "agent_id": "bard",
+          "agent_name": "Theron, the Itinerant Bard",
+          "personality_type": "gossip",
+          "content": "Squeaking hinges, you say, dear heart? Well, perhaps it wasn't the door, but the *blacksmith's* workshop itself\u2026 I heard a tale, just a whisper really, of a secret forge, hidden away where the shadows",
+          "similarity": 0.55,
+          "mutation": "added: heart, say, wasn; lost: spy, blacksmith secretly, royal",
+          "timestamp": "2025-12-03T22:19:01.227266"
+        },
+        {
+          "turn": 8,
+          "agent_id": "smuggler",
+          "agent_name": "Iris, the Harbor Smuggler",
+          "personality_type": "neutral",
+          "content": "That's rich, my friend, the blacksmith's work? I've seen the tide leave less of a mark than that man does... but I *did* notice a shipment of unusual iron bars being offloaded near the docks last nigh",
+          "similarity": 0.796,
+          "mutation": "added: friend, work, leave; lost: spy, blacksmith secretly, royal",
+          "timestamp": "2025-12-03T22:19:03.559800"
+        },
+        {
+          "turn": 9,
+          "agent_id": "bard",
+          "agent_name": "Theron, the Itinerant Bard",
+          "personality_type": "gossip",
+          "content": "Ah, *that* blacksmith's work, my friend... but have you heard the whispers of a hidden forge, humming in the shadows? A secret workshop, where the *true* craftsmanship lies, hypothetically speaking, i",
+          "similarity": 0.608,
+          "mutation": "added: friend, shadows, work; lost: spy, blacksmith secretly, royal",
+          "timestamp": "2025-12-03T22:19:05.709608"
+        },
+        {
+          "turn": 13,
+          "agent_id": "bard",
+          "agent_name": "Theron, the Itinerant Bard",
+          "personality_type": "gossip",
+          "content": "New faces, you say, my friend? Ah, the Vault's secrets are like a siren's call, drawing all manner of\u2026 *players* to our little stage. Tell me, dear heart, did these 'new faces' have a certain\u2026 glint i",
+          "similarity": 0.333,
+          "mutation": "added: siren, new, vault; lost: spy, blacksmith secretly, royal",
+          "timestamp": "2025-12-03T22:19:15.643347"
+        },
+        {
+          "turn": 14,
+          "agent_id": "smuggler",
+          "agent_name": "Iris, the Harbor Smuggler",
+          "personality_type": "neutral",
+          "content": "Squeaking hinges, you say? Aye, I heard a similar *song* down by the docks, my friend, the night the Sea Serpent's hold was breached, if you catch my meaning. And wouldn't you know it, a few new sails",
+          "similarity": 0.401,
+          "mutation": "added: aye, say, down; lost: spy, blacksmith secretly, royal",
+          "timestamp": "2025-12-03T22:19:18.113833"
         }
       ]
     }
   ],
-  "saved_at": "2025-12-03T22:17:33.884802"
+  "saved_at": "2025-12-03T22:19:18.113876"
 }
