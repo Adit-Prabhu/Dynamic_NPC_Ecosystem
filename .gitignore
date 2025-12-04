@@ -42,3 +42,5 @@ npm-debug.log*
 
 # Build artifacts
 *.pyc
+.graph_memory/
+*.bak
