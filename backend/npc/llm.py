@@ -5,7 +5,7 @@ import random
 from dataclasses import dataclass
 from typing import List, Protocol
 
-from .memory import MemoryRecord
+from .graph_memory import MemoryRecord
 from .personalities import PersonalityProfile
 from .state import WorldState
 

@@ -5,22 +5,25 @@ from typing import Deque, List, Sequence
 
 from .agents import Agent, DialogueTurn, seed_agents
 from .llm import TemplateDialogueModel
-from .memory import MemoryStore
+from .graph_memory import GraphMemoryStore
 from .personalities import PersonalityProfile, load_personality, sample_personality_keys
 from .state import WorldState
+
+# Alias for compatibility
+MemoryStore = GraphMemoryStore
 
 
 class Orchestrator:
     def __init__(
         self,
         personalities: Sequence[str] | None = None,
-        memory_store: MemoryStore | None = None,
+        memory_store: GraphMemoryStore | None = None,
         model: TemplateDialogueModel | None = None,
         rumor_hook: str = "Vault door left ajar last night.",
     ) -> None:
         roster = list(personalities) if personalities else sample_personality_keys(2)
         self.world_state = WorldState(last_event=rumor_hook)
-        self.memory_store = memory_store or MemoryStore()
+        self.memory_store = memory_store or GraphMemoryStore()
         self.model = model or TemplateDialogueModel()
         self.agents: List[Agent] = [
             Agent(agent_id=key, personality=load_personality(key), memory_store=self.memory_store, dialogue_model=self.model)
