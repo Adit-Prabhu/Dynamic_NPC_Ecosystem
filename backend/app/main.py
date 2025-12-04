@@ -169,6 +169,22 @@ async def get_config() -> Dict[str, Any]:
     }
 
 
+@app.get("/api/graph")
+async def get_graph_stats() -> Dict[str, Any]:
+    """Get knowledge graph statistics."""
+    return orchestrator.memory_store.get_stats()
+
+
+@app.get("/api/graph/entity/{entity_type}/{entity_name}")
+async def get_entity_context(entity_type: str, entity_name: str) -> Dict[str, Any]:
+    """Get context about a specific entity in the knowledge graph."""
+    entity_id = f"{entity_type}:{entity_name.lower()}"
+    context = orchestrator.memory_store.get_entity_context(entity_id, depth=2)
+    if not context:
+        return {"error": f"Entity {entity_id} not found"}
+    return context
+
+
 @app.get("/health")
 async def healthcheck() -> Dict[str, str]:
     return {"status": "ok"}
