@@ -23,7 +23,8 @@ class DialogueTurn:
     content: str
     rumor_delta: float
     sentiment: str
-    graph_context: Optional[str] = None  # New: relationship context
+    graph_context: Optional[str] = None  # Relationship context
+    internal_monologue: Optional[str] = None  # Chain-of-thought reasoning
 
     def as_dict(self) -> dict:
         result = {
@@ -39,6 +40,8 @@ class DialogueTurn:
         }
         if self.graph_context:
             result["graph_context"] = self.graph_context
+        if self.internal_monologue:
+            result["internal_monologue"] = self.internal_monologue
         return result
 
 
@@ -113,6 +116,7 @@ class Agent:
             rumor_delta=result.rumor_delta,
             sentiment=result.sentiment,
             graph_context=graph_context,
+            internal_monologue=result.internal_monologue,
         )
     
     def _build_graph_context(self, listener: "Agent", memories: List[MemoryRecord]) -> str:

@@ -106,6 +106,115 @@ button:hover {
   padding: 1rem;
 }
 
+.hint {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Dialogue Card - Clickable for Chain-of-Thought */
+.dialogue-card {
+  cursor: pointer;
+  transition: all 200ms ease;
+  position: relative;
+}
+
+.dialogue-card:hover {
+  border-color: rgba(251, 191, 36, 0.4);
+  background: rgba(15, 23, 42, 0.95);
+}
+
+.dialogue-card.expanded {
+  border-color: rgba(251, 191, 36, 0.6);
+  background: rgba(15, 23, 42, 1);
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.1);
+}
+
+/* Thought Bubble - Internal Monologue */
+.thought-bubble {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(168, 85, 247, 0.1));
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  margin: 0.75rem 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  animation: fadeIn 200ms ease;
+}
+
+.thought-icon {
+  font-size: 1.1rem;
+}
+
+.thought-label {
+  color: #a855f7;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.thought-text {
+  color: #c4b5fd;
+  font-style: italic;
+  flex: 1;
+}
+
+/* Spoken Dialogue when expanded */
+.spoken-dialogue {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.spoken-label {
+  color: #22c55e;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.spoken-text {
+  color: #e2e8f0;
+  padding-left: 0;
+  margin: 0;
+}
+
+/* Graph Context */
+.graph-context {
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  animation: fadeIn 200ms ease;
+}
+
+.context-icon {
+  font-size: 0.9rem;
+}
+
+.context-text {
+  color: #7dd3fc;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .turn-heading {
   display: flex;
   align-items: center;

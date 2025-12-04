@@ -12,6 +12,8 @@ type DialogueTurn = {
   rumor_delta: number;
   sentiment: string;
   timestamp: string;
+  internal_monologue?: string;
+  graph_context?: string;
 };
 
 type WorldState = {
@@ -152,26 +154,62 @@ function App() {
 
       <main className="panel">
         <h2>Gossip Timeline</h2>
+        <p className="hint">💭 Click any dialogue to reveal the NPC's hidden thoughts</p>
         {history.length === 0 && <p className="muted">No dialogue yet.</p>}
         <ul className="timeline">
           {history.map((turn, index) => (
-            <li key={`${turn.timestamp}-${index}`}>
-              <div className="turn-heading">
-                <span className="speaker">{turn.speaker}</span>
-                <span className="arrow">→</span>
-                <span className="listener">{turn.listener}</span>
-                <span className="delta">Δ {turn.rumor_delta.toFixed(2)}</span>
-              </div>
-              <p className="muted">
-                {turn.speaker_profession} ({turn.speaker_mood}) → {turn.listener_profession} ({turn.listener_mood}) · {turn.sentiment}
-              </p>
-              <p>{turn.content}</p>
-              <small>{new Date(turn.timestamp).toLocaleTimeString()}</small>
-            </li>
+            <ThoughtBubbleCard key={`${turn.timestamp}-${index}`} turn={turn} />
           ))}
         </ul>
       </main>
     </div>
+  );
+}
+
+/** Expandable card that reveals NPC's internal monologue on click */
+function ThoughtBubbleCard({ turn }: { turn: DialogueTurn }) {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <li 
+      className={`dialogue-card ${expanded ? "expanded" : ""}`}
+      onClick={() => setExpanded((v) => !v)}
+    >
+      <div className="turn-heading">
+        <span className="speaker">{turn.speaker}</span>
+        <span className="arrow">→</span>
+        <span className="listener">{turn.listener}</span>
+        <span className="delta">Δ {turn.rumor_delta.toFixed(2)}</span>
+      </div>
+      <p className="muted">
+        {turn.speaker_profession} ({turn.speaker_mood}) → {turn.listener_profession} ({turn.listener_mood}) · {turn.sentiment}
+      </p>
+      
+      {/* Internal Monologue - Chain of Thought */}
+      {expanded && turn.internal_monologue && (
+        <div className="thought-bubble">
+          <span className="thought-icon">💭</span>
+          <span className="thought-label">Internal:</span>
+          <span className="thought-text">"{turn.internal_monologue}"</span>
+        </div>
+      )}
+      
+      {/* Spoken Dialogue */}
+      <div className="spoken-dialogue">
+        {expanded && <span className="spoken-label">Spoken:</span>}
+        <p className={expanded ? "spoken-text" : ""}>{turn.content}</p>
+      </div>
+      
+      {/* Graph Context (if available) */}
+      {expanded && turn.graph_context && (
+        <div className="graph-context">
+          <span className="context-icon">🔗</span>
+          <span className="context-text">{turn.graph_context}</span>
+        </div>
+      )}
+      
+      <small>{new Date(turn.timestamp).toLocaleTimeString()}</small>
+    </li>
   );
 }
 

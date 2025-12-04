@@ -26,6 +26,7 @@ class DialogueResult:
     rumor_delta: float
     sentiment: str
     new_memory: str
+    internal_monologue: str = ""  # Chain-of-thought reasoning
 
 
 class DialogueModel(Protocol):
@@ -131,12 +132,44 @@ class TemplateDialogueModel:
             f"{speaker.name.split(',')[0]} ({speaker.profession}) confided while feeling {speaker.mood} "
             f"that {topic_hint} connects to {memory_snippet}."
         )
+        
+        # Generate internal monologue based on mood and reaction type
+        internal_thoughts = {
+            "worried": [
+                f"This {topic_hint} situation is getting out of hand. I need to stay alert.",
+                f"Something doesn't add up. Why would {listener.name.split(',')[0]} ask about this?",
+                f"I shouldn't have mentioned that. But it's too late now.",
+            ],
+            "suspicious": [
+                f"{listener.name.split(',')[0]} knows more than they're letting on. I can tell.",
+                f"They're fishing for information. Two can play that game.",
+                f"The way they reacted... they're definitely hiding something about {topic_hint}.",
+            ],
+            "excited": [
+                f"Finally, someone who sees the connection! This changes everything.",
+                f"If I'm right about {topic_hint}, we could use this to our advantage.",
+                f"I knew it! This confirms what I suspected all along.",
+            ],
+            "bitter": [
+                f"Of course they'd come to me now. Where were they when I warned everyone?",
+                f"Typical. Nobody listens until it's too late.",
+                f"I should charge them for this information. But they'd never pay what it's worth.",
+            ],
+            "knowing": [
+                f"They don't realize how much I've already figured out about {topic_hint}.",
+                f"I'll share just enough to see how they react. Information is currency.",
+                f"Interesting that they brought this up now. The timing is... deliberate.",
+            ],
+        }
+        internal_monologue = self._rand.choice(internal_thoughts.get(reaction_type, internal_thoughts["worried"]))
+        
         sentiment = "urgent" if rumor_delta > 0.28 else "tense" if rumor_delta > 0.18 else "worried"
         return DialogueResult(
             utterance=utterance,
             rumor_delta=rumor_delta,
             sentiment=sentiment,
             new_memory=new_memory,
+            internal_monologue=internal_monologue,
         )
 
 
@@ -265,6 +298,7 @@ Their profession ({speaker.profession}) colors WHAT details they notice.
 Their quirks should occasionally peek through.
 
 Return JSON with:
+- "internal_monologue": The character's PRIVATE thoughts (what they're really thinking but won't say - their strategy, suspicions, true feelings about the listener, what they're hiding). Write in first person, 1-2 sentences. Example: "She's lying about the shipment. I'll play along to see what else she reveals."
 - "utterance": The actual spoken dialogue (1-3 sentences, no narration, NO "X, you say?" openings)
 - "rumor_delta": How much this spreads/intensifies the rumor (0.05 = idle chat, 0.35 = explosive revelation)
 - "sentiment": The emotional undertone ("curious", "worried", "conspiratorial", "dismissive", "excited", "bitter", "knowing", "anxious", "defiant")
@@ -280,6 +314,7 @@ Return JSON with:
                 "rumor_delta": 0.15,
                 "sentiment": "worried",
                 "new_memory": f"Discussed {topic}",
+                "internal_monologue": "Something feels off about this whole situation...",
             }
         if isinstance(payload, list):
             payload = payload[0] if payload else {}
@@ -289,6 +324,7 @@ Return JSON with:
             rumor_delta=max(0.05, min(0.35, rumor_delta)),
             sentiment=str(payload.get("sentiment", "worried")),
             new_memory=str(payload.get("new_memory", topic)),
+            internal_monologue=str(payload.get("internal_monologue", "")),
         )
 
 
@@ -441,8 +477,9 @@ Their profession ({speaker.profession}) colors WHAT details they notice.
 Their quirks should occasionally peek through.
 
 Return JSON with these exact keys:
-{{"utterance": "the dialogue", "rumor_delta": 0.15, "sentiment": "worried", "new_memory": "what was shared"}}
+{{"internal_monologue": "private thoughts", "utterance": "the dialogue", "rumor_delta": 0.15, "sentiment": "worried", "new_memory": "what was shared"}}
 
+- "internal_monologue": The character's PRIVATE thoughts (what they're really thinking but won't say - their strategy, suspicions, true feelings). Write in first person, 1-2 sentences. Example: "She's lying. I'll play along to see what else she reveals."
 - "utterance": The actual spoken dialogue (1-3 sentences, no narration, NO "X, you say?" openings)
 - "rumor_delta": How much this spreads/intensifies the rumor (0.05 = idle chat, 0.35 = explosive revelation)
 - "sentiment": The emotional undertone ("curious", "worried", "conspiratorial", "dismissive", "excited", "bitter", "knowing", "anxious", "defiant")
@@ -485,6 +522,7 @@ Return JSON with these exact keys:
                 "rumor_delta": 0.15,
                 "sentiment": "worried",
                 "new_memory": f"Mentioned {original_incident}",
+                "internal_monologue": "Something's not adding up here...",
             }
         
         if isinstance(payload, list):
@@ -496,4 +534,5 @@ Return JSON with these exact keys:
             rumor_delta=max(0.05, min(0.35, rumor_delta)),
             sentiment=str(payload.get("sentiment", "worried")),
             new_memory=str(payload.get("new_memory", topic)),
+            internal_monologue=str(payload.get("internal_monologue", "")),
         )
