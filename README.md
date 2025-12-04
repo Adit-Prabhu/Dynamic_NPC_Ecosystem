@@ -1,6 +1,6 @@
 # 🎭 Dynamic NPC Ecosystem
 
-A demo sandbox where autonomous NPCs gossip, scheme, and spread rumors without player intervention. Each character has a distinct personality, voice, and memory—powered by LLMs and GraphRAG.
+A demo sandbox where autonomous NPCs gossip, scheme, and spread rumors without player intervention. Each character has a distinct personality, voice, and memory, powered by LLMs and GraphRAG.
 
 ![Python](https://img.shields.io/badge/python-3.12-blue) ![React](https://img.shields.io/badge/react-18-61dafb) ![FastAPI](https://img.shields.io/badge/fastapi-0.115-009688)
 
