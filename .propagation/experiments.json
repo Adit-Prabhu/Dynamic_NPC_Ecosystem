@@ -1,20 +1,72 @@
 {
   "experiments": [
     {
-      "experiment_id": "exp_20251203_221200",
-      "secret": "Test secret",
+      "experiment_id": "exp_20251203_221733",
+      "secret": "The blacksmith is secretly a royal spy",
       "seed_agent": {
         "id": "bard",
         "name": "Theron, the Itinerant Bard"
       },
-      "start_time": "2025-12-03T22:12:00.791374",
-      "total_turns": 0,
+      "start_time": "2025-12-03T22:17:33.794192",
+      "total_turns": 4,
       "agents_reached": [
-        "bard"
+        "bard",
+        "guard"
       ],
-      "propagation_rate": 1.0,
-      "traces": []
+      "propagation_rate": 0.5,
+      "traces": [
+        {
+          "turn": 0,
+          "agent_id": "bard",
+          "agent_name": "Theron, the Itinerant Bard",
+          "personality_type": "gossip",
+          "content": "Ah, a tale unfolds! the [secret] the blacksmith is secretly a royal spy situation\u2014 right after the blacksmith is secretly a royal spy? please., and I've seen this pattern before.",
+          "similarity": 1.0,
+          "mutation": "added: right, situation, tale; lost: blacksmith secretly, secretly royal, royal spy",
+          "timestamp": "2025-12-03T22:17:33.817727"
+        },
+        {
+          "turn": 1,
+          "agent_id": "guard",
+          "agent_name": "Rylan, the Anxious Guard",
+          "personality_type": "neutral",
+          "content": "Don't repeat this\u2014what happened with Blacksmith paid in ancient coins\u2014 can't be coincidence with ah, a tale unfolds! the [secret] the blacksmith is secretly a royal spy situation\u2014 right after the b, a",
+          "similarity": 1.0,
+          "mutation": "added: don, happened, ancient; lost: secretly, secretly royal, royal",
+          "timestamp": "2025-12-03T22:17:33.834603"
+        },
+        {
+          "turn": 2,
+          "agent_id": "bard",
+          "agent_name": "Theron, the Itinerant Bard",
+          "personality_type": "gossip",
+          "content": "The whispers compose themselves: what happened with Blacksmith paid in ancient coins\u2014 same pattern as don't repeat this\u2014what happened with blacksmith paid in ancient coins\u2014 can't be coincidence with a",
+          "similarity": 0.495,
+          "mutation": "added: same, happened, ancient; lost: secretly, secretly royal, royal",
+          "timestamp": "2025-12-03T22:17:33.850961"
+        },
+        {
+          "turn": 3,
+          "agent_id": "guard",
+          "agent_name": "Rylan, the Anxious Guard",
+          "personality_type": "neutral",
+          "content": "Don't repeat this\u2014what happened with Blacksmith paid in ancient coins\u2014 same pattern as the whispers compose themselves: what happened with blacksmith paid in ancient coins\u2014 same pattern a, and nobody'",
+          "similarity": 0.529,
+          "mutation": "added: same, don, happened; lost: secretly, secretly royal, royal",
+          "timestamp": "2025-12-03T22:17:33.867865"
+        },
+        {
+          "turn": 4,
+          "agent_id": "bard",
+          "agent_name": "Theron, the Itinerant Bard",
+          "personality_type": "gossip",
+          "content": "Ah, a tale unfolds! that business with Blacksmith paid in ancient coins\u2014 it ties back to don't repeat this\u2014what happened with blacksmith paid in ancient coins\u2014 same pattern as the whispers , and you'r",
+          "similarity": 0.51,
+          "mutation": "added: back, don, tale; lost: secretly, secretly royal, royal",
+          "timestamp": "2025-12-03T22:17:33.884765"
+        }
+      ]
     }
   ],
-  "saved_at": "2025-12-03T22:12:00.791458"
+  "saved_at": "2025-12-03T22:17:33.884802"
 }

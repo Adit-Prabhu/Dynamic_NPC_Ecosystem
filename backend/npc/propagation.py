@@ -103,11 +103,15 @@ class PropagationTracker:
     GOSSIP_INDICATORS = [
         "curious", "talkative", "social", "nosy", "dramatic",
         "theatrical", "mischievous", "conspiratorial", "excited",
+        "chatty", "inquisitive", "gossipy", "friendly", "outgoing",
+        "expressive", "animated", "enthusiastic", "eager", "lively",
     ]
     
     STOIC_INDICATORS = [
         "reserved", "quiet", "suspicious", "paranoid", "guarded",
         "careful", "stoic", "serene", "calm", "patient",
+        "grumpy", "stern", "serious", "somber", "brooding",
+        "cold", "distant", "secretive", "tight-lipped", "taciturn",
     ]
     
     def __init__(self, persist_path: Optional[Path] = None):
@@ -237,9 +241,13 @@ class PropagationTracker:
         for experiment in self.experiments.values():
             # Check if this content relates to the secret
             similarity = self._calculate_similarity(content, experiment.secret)
-            keyword_match = self._check_keyword_match(content_lower, experiment.secret)
+            keyword_matches = self._count_keyword_matches(content_lower, experiment.secret)
             
-            if similarity > 0.3 or keyword_match:
+            # More lenient detection:
+            # - Any keyword match counts as propagation (they're talking about it)
+            # - OR similarity > 0.15 (even loose mentions)
+            # The key insight: if NPCs are discussing the topic AT ALL, that's propagation
+            if keyword_matches >= 1 or similarity > 0.15:
                 # Secret detected in this turn!
                 personality = self.classify_personality(
                     speaker_mood, speaker_profession, speaker_name
@@ -247,13 +255,16 @@ class PropagationTracker:
                 
                 mutation = self._identify_mutation(content, experiment.secret)
                 
+                # Calculate a propagation score based on how much of the secret is preserved
+                propagation_strength = min(1.0, (similarity * 2) + (keyword_matches * 0.15))
+                
                 trace = SecretTrace(
                     turn_number=turn_number,
                     agent_id=speaker_id,
                     agent_name=speaker_name,
                     personality_type=personality,
                     content=content[:200],
-                    similarity_score=max(similarity, 0.5 if keyword_match else 0),
+                    similarity_score=propagation_strength,
                     mutation=mutation,
                 )
                 
@@ -266,7 +277,7 @@ class PropagationTracker:
                 
                 logger.info(
                     f"Secret propagation detected: {speaker_name} → turn {turn_number}, "
-                    f"similarity: {similarity:.2f}, mutation: {mutation[:50]}"
+                    f"similarity: {similarity:.2f}, keywords: {keyword_matches}, mutation: {mutation[:50]}"
                 )
         
         if detected:
@@ -280,11 +291,14 @@ class PropagationTracker:
         # In production, you'd use embeddings for semantic similarity
         return SequenceMatcher(None, content.lower(), secret.lower()).ratio()
     
+    def _count_keyword_matches(self, content: str, secret: str) -> int:
+        """Count how many key terms from secret appear in content."""
+        keywords = self._extract_keywords(secret)
+        return sum(1 for kw in keywords if kw in content)
+    
     def _check_keyword_match(self, content: str, secret: str) -> bool:
         """Check if key terms from secret appear in content."""
-        keywords = self._extract_keywords(secret)
-        matches = sum(1 for kw in keywords if kw in content)
-        return matches >= 2  # At least 2 keywords must match
+        return self._count_keyword_matches(content, secret) >= 1
     
     def _identify_mutation(self, content: str, original: str) -> str:
         """Identify how the information has mutated."""
