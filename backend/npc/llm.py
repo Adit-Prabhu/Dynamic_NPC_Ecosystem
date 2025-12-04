@@ -160,9 +160,19 @@ CRITICAL RULES:
    - Have opinions colored by their profession and biases
 4. AVOID:
    - Generic phrases like "I heard a rumor" or "Word on the street"
+   - NEVER start with "X, you say?" or "So you're saying..." - this is lazy writing
+   - Don't echo back what the other person just said - move the conversation forward
    - Exposition dumps - drop hints, don't explain everything
    - Perfect grammar if the character wouldn't speak that way
    - Starting with the listener's name (people rarely do this in real speech)
+
+VARIED RESPONSE STARTERS - use different patterns:
+- Jump straight into your own observation or theory
+- React emotionally first ("Hah!", "Gods above...", "That's...") 
+- Share a related personal experience
+- Ask a pointed question
+- Interrupt with urgent new information
+- Mutter agreement/disagreement before elaborating
 
 The dialogue should feel like eavesdropping on a real conversation, not reading a script."""
 
@@ -243,18 +253,19 @@ WHAT THE SPEAKER REMEMBERS:
 TASK:
 Write what {speaker.name.split(',')[0]} says to {listener.name.split(',')[0]} RIGHT NOW in this ongoing conversation.
 
-CRITICAL: This is a back-and-forth conversation. You must:
-1. RESPOND to what was just said (agree, disagree, add to it, question it)
-2. Add NEW information, theories, or personal observations
-3. Move the conversation FORWARD - don't just echo the same points
-4. Let your character's unique perspective shine through
+CRITICAL DIALOGUE RULES:
+1. NEVER start with "X, you say?" or echo back what the other person said
+2. Jump straight into YOUR character's reaction, observation, or new information
+3. Vary your openings: exclamations, questions, personal anecdotes, theories, or just blurt out the key point
+4. Add NEW details from your character's unique perspective and profession
+5. Move the conversation FORWARD - build, challenge, or pivot
 
 Their {speaker.mood} mood should color HOW they say it.
 Their profession ({speaker.profession}) colors WHAT details they notice.
 Their quirks should occasionally peek through.
 
 Return JSON with:
-- "utterance": The actual spoken dialogue (1-3 sentences, no narration, MUST advance the conversation)
+- "utterance": The actual spoken dialogue (1-3 sentences, no narration, NO "X, you say?" openings)
 - "rumor_delta": How much this spreads/intensifies the rumor (0.05 = idle chat, 0.35 = explosive revelation)
 - "sentiment": The emotional undertone ("curious", "worried", "conspiratorial", "dismissive", "excited", "bitter", "knowing", "anxious", "defiant")
 - "new_memory": A brief note about the NEW information or theory shared (not a repeat)"""
@@ -301,9 +312,19 @@ CRITICAL RULES:
    - Have opinions colored by their profession and biases
 4. AVOID:
    - Generic phrases like "I heard a rumor" or "Word on the street"
+   - NEVER start with "X, you say?" or "So you're saying..." - this is lazy writing
+   - Don't echo back what the other person just said - move the conversation forward
    - Exposition dumps - drop hints, don't explain everything
    - Perfect grammar if the character wouldn't speak that way
    - Starting with the listener's name (people rarely do this in real speech)
+
+VARIED RESPONSE STARTERS - use different patterns:
+- Jump straight into your own observation or theory
+- React emotionally first ("Hah!", "Gods above...", "That's...") 
+- Share a related personal experience
+- Ask a pointed question
+- Interrupt with urgent new information
+- Mutter agreement/disagreement before elaborating
 
 The dialogue should feel like eavesdropping on a real conversation, not reading a script.
 
@@ -408,11 +429,12 @@ WHAT THE SPEAKER REMEMBERS:
 TASK:
 Write what {speaker.name.split(',')[0]} says to {listener.name.split(',')[0]} RIGHT NOW in this ongoing conversation.
 
-CRITICAL: This is a back-and-forth conversation. You must:
-1. RESPOND to what was just said (agree, disagree, add to it, question it)
-2. Add NEW information, theories, or personal observations
-3. Move the conversation FORWARD - don't just echo the same points
-4. Let your character's unique perspective shine through
+CRITICAL DIALOGUE RULES:
+1. NEVER start with "X, you say?" or echo back what the other person said
+2. Jump straight into YOUR character's reaction, observation, or new information
+3. Vary your openings: exclamations, questions, personal anecdotes, theories, or just blurt out the key point
+4. Add NEW details from your character's unique perspective and profession
+5. Move the conversation FORWARD - build, challenge, or pivot
 
 Their {speaker.mood} mood should color HOW they say it.
 Their profession ({speaker.profession}) colors WHAT details they notice.
@@ -421,7 +443,7 @@ Their quirks should occasionally peek through.
 Return JSON with these exact keys:
 {{"utterance": "the dialogue", "rumor_delta": 0.15, "sentiment": "worried", "new_memory": "what was shared"}}
 
-- "utterance": The actual spoken dialogue (1-3 sentences, no narration, MUST advance the conversation)
+- "utterance": The actual spoken dialogue (1-3 sentences, no narration, NO "X, you say?" openings)
 - "rumor_delta": How much this spreads/intensifies the rumor (0.05 = idle chat, 0.35 = explosive revelation)
 - "sentiment": The emotional undertone ("curious", "worried", "conspiratorial", "dismissive", "excited", "bitter", "knowing", "anxious", "defiant")
 - "new_memory": A brief note about the NEW information or theory shared"""
